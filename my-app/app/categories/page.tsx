@@ -90,7 +90,7 @@ export default function CategoriesPage() {
           {error}
         </div>
       )}
-      {user && (
+      {isAdmin && (
         <form onSubmit={create} className="card p-6 mb-8 grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3 items-end">
           <div>
             <label className="block text-sm font-medium mb-1">Name</label>
@@ -144,7 +144,7 @@ export default function CategoriesPage() {
                       {c.isActive ? 'Active' : 'Inactive'}
                     </span>
                   </div>
-                  {user && (
+                  {isAdmin && (
                     <div className="flex gap-2 mt-4">
                       <button
                         onClick={() => { setEditingId(c.id); setEditName(c.name); setEditDescription(c.description || ''); setError(''); }}
