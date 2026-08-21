@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { BookCategoriesModule } from './book-categories/book-categories.module';
 import { BooksModule } from './books/books.module';
 import { PurchasesModule } from './purchases/purchases.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { PurchasesModule } from './purchases/purchases.module';
     BookCategoriesModule,
     BooksModule,
     PurchasesModule,
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
