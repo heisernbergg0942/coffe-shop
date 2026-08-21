@@ -56,7 +56,7 @@ export class AuthService {
       });
       user.authProvider = provider as AuthProvider;
       user.socialId = token;
-      await this.usersService.update(user.id, { authProvider: provider as AuthProvider });
+      await this.usersService.update(user.id, { authProvider: provider as AuthProvider, socialId: token });
     }
     return this.login(user);
   }

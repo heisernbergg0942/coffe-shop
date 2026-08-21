@@ -20,4 +20,8 @@ export class UpdateUserDto {
 
   @IsOptional()
   authProvider?: AuthProvider;
+
+  @IsString()
+  @IsOptional()
+  socialId?: string;
 }

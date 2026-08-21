@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { PageShell } from '@/components/page-shell';
+import { useAuth } from '@/hooks/use-auth';
 
 type Category = { id: string; name: string; description?: string; isActive: boolean };
 
 export default function CategoriesPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [items, setItems] = useState<Category[]>([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -17,6 +19,8 @@ export default function CategoriesPage() {
   const [editDescription, setEditDescription] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
+  const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
     load();
@@ -77,19 +81,21 @@ export default function CategoriesPage() {
 
   return (
     <PageShell title="Book Categories" subtitle="Browse and manage book categories">
-      <form onSubmit={create} className="card p-6 mb-8 grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3 items-end">
-        <div>
-          <label className="block text-sm font-medium mb-1">Name</label>
-          <input className="input-field" value={name} onChange={(e) => setName(e.target.value)} required />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Description</label>
-          <input className="input-field" value={description} onChange={(e) => setDescription(e.target.value)} />
-        </div>
-        <button type="submit" disabled={submitting} className="btn-primary h-[42px]">
-          {submitting ? 'Saving...' : 'Add Category'}
-        </button>
-      </form>
+      {isAdmin && (
+        <form onSubmit={create} className="card p-6 mb-8 grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3 items-end">
+          <div>
+            <label className="block text-sm font-medium mb-1">Name</label>
+            <input className="input-field" value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Description</label>
+            <input className="input-field" value={description} onChange={(e) => setDescription(e.target.value)} />
+          </div>
+          <button type="submit" disabled={submitting} className="btn-primary h-[42px]">
+            {submitting ? 'Saving...' : 'Add Category'}
+          </button>
+        </form>
+      )}
 
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -102,7 +108,7 @@ export default function CategoriesPage() {
           ))}
         </div>
       ) : items.length === 0 ? (
-        <EmptyState message="No categories yet. Create one above." />
+        <EmptyState message="No categories yet." />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {items.map((c) => (
@@ -129,17 +135,19 @@ export default function CategoriesPage() {
                       {c.isActive ? 'Active' : 'Inactive'}
                     </span>
                   </div>
-                  <div className="flex gap-2 mt-4">
-                    <button
-                      onClick={() => { setEditingId(c.id); setEditName(c.name); setEditDescription(c.description || ''); }}
-                      className="text-sm px-3 py-1.5 rounded border border-border hover:bg-background transition-colors"
-                    >
-                      Edit
-                    </button>
-                    <button onClick={() => remove(c.id)} className="text-sm px-3 py-1.5 rounded border border-red-200 text-red-700 hover:bg-red-50 transition-colors">
-                      Delete
-                    </button>
-                  </div>
+                  {isAdmin && (
+                    <div className="flex gap-2 mt-4">
+                      <button
+                        onClick={() => { setEditingId(c.id); setEditName(c.name); setEditDescription(c.description || ''); }}
+                        className="text-sm px-3 py-1.5 rounded border border-border hover:bg-background transition-colors"
+                      >
+                        Edit
+                      </button>
+                      <button onClick={() => remove(c.id)} className="text-sm px-3 py-1.5 rounded border border-red-200 text-red-700 hover:bg-red-50 transition-colors">
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
             </div>

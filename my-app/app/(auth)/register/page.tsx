@@ -35,7 +35,9 @@ export default function RegisterPage() {
     setLoading(true);
     setError('');
     try {
-      const data = await api.auth.social(provider, 'demo-token');
+      const data = provider === 'google'
+        ? await api.auth.socialGoogle('demo-token')
+        : await api.auth.socialFacebook('demo-token');
       login(data);
       router.push('/books');
     } catch (err: any) {

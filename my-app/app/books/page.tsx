@@ -11,12 +11,18 @@ type Category = { id: string; name: string };
 
 export default function BooksPage() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [tab, setTab] = useState<'public' | 'sell'>('public');
   const [categoryId, setCategoryId] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingBook, setEditingBook] = useState<Book | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({ title: '', author: '', description: '', visibility: 'public' as 'public' | 'sell', price: '', categoryId: '' });
+
+  const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
     api.categories.findAll().then(setCategories).catch(() => {});
@@ -38,8 +44,67 @@ export default function BooksPage() {
     }
   }
 
+  function openCreate() {
+    setEditingBook(null);
+    setForm({ title: '', author: '', description: '', visibility: tab, price: '', categoryId: categories[0]?.id || '' });
+    setShowForm(true);
+  }
+
+  function openEdit(book: Book) {
+    setEditingBook(book);
+    setForm({
+      title: book.title,
+      author: book.author || '',
+      description: book.description || '',
+      visibility: book.visibility,
+      price: book.price?.toString() || '',
+      categoryId: book.category?.id || categories[0]?.id || '',
+    });
+    setShowForm(true);
+  }
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const payload: any = {
+        title: form.title,
+        author: form.author,
+        description: form.description,
+        visibility: form.visibility,
+        categoryId: form.categoryId,
+      };
+      if (form.visibility === 'sell') {
+        payload.price = parseFloat(form.price);
+      }
+      if (editingBook) {
+        await api.books.update(editingBook.id, payload);
+      } else {
+        await api.books.create(payload);
+      }
+      setShowForm(false);
+      await load();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save book');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function remove(bookId: string) {
+    if (!confirm('Delete this book?')) return;
+    try {
+      await api.books.remove(bookId);
+      await load();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete book');
+    }
+  }
+
   function handleBuy(bookId: string) {
-    if (!isAuthenticated) {
+    if (!user) {
       router.push('/login');
       return;
     }
@@ -63,7 +128,59 @@ export default function BooksPage() {
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
         </select>
+        {isAdmin && (
+          <button onClick={openCreate} className="btn-primary ml-auto">Add Book</button>
+        )}
       </div>
+
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="bg-white rounded-xl shadow-xl border border-border w-full max-w-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">{editingBook ? 'Edit Book' : 'Add Book'}</h3>
+            <form onSubmit={submit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Title</label>
+                <input className="input-field" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Author</label>
+                <input className="input-field" value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Description</label>
+                <textarea className="input-field" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Visibility</label>
+                  <select className="input-field" value={form.visibility} onChange={(e) => setForm({ ...form, visibility: e.target.value as 'public' | 'sell' })}>
+                    <option value="public">Public</option>
+                    <option value="sell">For Sale</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Category</label>
+                  <select className="input-field" value={form.categoryId} onChange={(e) => setForm({ ...form, categoryId: e.target.value })}>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              {form.visibility === 'sell' && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">Price ($)</label>
+                  <input className="input-field" type="number" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} required />
+                </div>
+              )}
+              <div className="flex justify-end gap-2 pt-2">
+                <button type="button" onClick={() => setShowForm(false)} className="btn-secondary">Cancel</button>
+                <button type="submit" disabled={submitting} className="btn-primary">{submitting ? 'Saving...' : 'Save'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <BookGridSkeleton />
@@ -87,11 +204,17 @@ export default function BooksPage() {
                 <span className="text-lg font-bold text-primary">
                   {book.visibility === 'sell' ? `$${Number(book.price).toFixed(2)}` : 'Free'}
                 </span>
-                {book.visibility === 'sell' && (
-                  <button onClick={() => handleBuy(book.id)} className="btn-primary text-sm">
-                    Buy Now
-                  </button>
-                )}
+                <div className="flex gap-2">
+                  {book.visibility === 'sell' && (
+                    <button onClick={() => handleBuy(book.id)} className="btn-primary text-sm">Buy Now</button>
+                  )}
+                  {isAdmin && (
+                    <>
+                      <button onClick={() => openEdit(book)} className="text-sm px-3 py-1.5 rounded border border-border hover:bg-background transition-colors">Edit</button>
+                      <button onClick={() => remove(book.id)} className="text-sm px-3 py-1.5 rounded border border-red-200 text-red-700 hover:bg-red-50 transition-colors">Delete</button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           ))}
