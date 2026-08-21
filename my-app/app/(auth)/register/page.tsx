@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/use-auth';
+import { CoffeeCupIcon } from '@/components/icons';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -46,24 +47,29 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <div className="max-w-6xl mx-auto px-4 py-4">
-        <Link href="/" className="text-xl font-bold text-primary">☕ Coffee Shop</Link>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <Link href="/" className="inline-flex items-center gap-2 text-xl font-bold text-primary">
+          <CoffeeCupIcon className="w-6 h-6" />
+          Coffee Shop
+        </Link>
       </div>
       <div className="flex-1 flex items-center justify-center px-4 py-10">
-        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg border border-border overflow-hidden">
+        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl border border-border overflow-hidden">
           <div className="grid md:grid-cols-2">
             <div className="bg-primary p-8 text-white flex flex-col justify-between hidden md:flex">
               <div>
+                <CoffeeCupIcon className="w-10 h-10 mb-6 text-white/90" />
                 <h2 className="text-3xl font-bold mb-4">Create account</h2>
-                <p className="text-white/80">Join Coffee Shop to browse books, purchase reads, and manage orders.</p>
+                <p className="text-white/80 leading-relaxed">Join Coffee Shop to browse books, purchase reads, and manage orders.</p>
               </div>
               <div className="mt-8">
-                <p className="text-sm text-white/70">Need an account?</p>
-                <p className="text-sm mt-1">Signing up takes less than a minute.</p>
+                <p className="text-sm text-white/70 mb-1">Need an account?</p>
+                <p className="text-sm">Signing up takes less than a minute.</p>
               </div>
             </div>
             <div className="p-8">
               <div className="md:hidden mb-6 text-center">
+                <CoffeeCupIcon className="w-8 h-8 text-primary mx-auto mb-3" />
                 <h1 className="text-2xl font-bold text-primary">Create account</h1>
                 <p className="text-sm text-foreground/70 mt-1">Join Coffee Shop today</p>
               </div>
@@ -72,29 +78,29 @@ export default function RegisterPage() {
                   {error}
                 </div>
               )}
-              <form onSubmit={onSubmit} className="space-y-4">
+              <form onSubmit={onSubmit} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Name</label>
+                  <label className="block text-sm font-medium mb-1.5">Name</label>
                   <div className="relative">
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-foreground/40">
+                    <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-foreground/40">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                     </span>
                     <input className="input-field pl-10" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Email</label>
+                  <label className="block text-sm font-medium mb-1.5">Email</label>
                   <div className="relative">
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-foreground/40">
+                    <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-foreground/40">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 00-9-9m0 0A9 9 0 019 12" /></svg>
                     </span>
                     <input className="input-field pl-10" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Password</label>
+                  <label className="block text-sm font-medium mb-1.5">Password</label>
                   <div className="relative">
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-foreground/40">
+                    <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-foreground/40">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                     </span>
                     <input className="input-field pl-10" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} placeholder="At least 6 characters" />

@@ -2,12 +2,14 @@
 
 import Link from 'next/link';
 import { PageShell } from '@/components/page-shell';
+import { CoffeeCupIcon } from '@/components/icons';
 
 export default function HomePage() {
   return (
     <PageShell>
       <section className="text-center py-16 sm:py-24">
-        <h1 className="text-5xl sm:text-6xl font-bold text-primary mb-4">☕ Coffee Shop</h1>
+        <CoffeeCupIcon className="w-12 h-12 text-primary mx-auto mb-6" />
+        <h1 className="text-5xl sm:text-6xl font-bold text-primary mb-4">Coffee Shop</h1>
         <p className="text-lg text-foreground/70 mb-8 max-w-2xl mx-auto">
           Discover books in a cozy coffee shop setting. Browse public reads or purchase books to enjoy with your favorite coffee.
         </p>
