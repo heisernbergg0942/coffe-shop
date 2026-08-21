@@ -14,7 +14,7 @@ export default function BooksPage() {
   const { user } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [tab, setTab] = useState<'public' | 'sell'>('public');
+  const [tab, setTab] = useState<'all' | 'public' | 'sell'>('all');
   const [categoryId, setCategoryId] = useState('');
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -36,7 +36,10 @@ export default function BooksPage() {
   async function load() {
     setLoading(true);
     try {
-      const data = await api.books.findAll({ visibility: tab, categoryId: categoryId || undefined });
+      const data = await api.books.findAll({
+        visibility: tab === 'all' ? undefined : tab,
+        categoryId: categoryId || undefined,
+      });
       setBooks(data);
     } catch (err) {
       console.error(err);
@@ -48,7 +51,7 @@ export default function BooksPage() {
   function openCreate() {
     setEditingBook(null);
     setError('');
-    setForm({ title: '', author: '', description: '', visibility: tab, price: '', categoryId: categories[0]?.id || '' });
+    setForm({ title: '', author: '', description: '', visibility: tab === 'all' ? 'public' : tab, price: '', categoryId: categories[0]?.id || '' });
     setShowForm(true);
   }
 
@@ -122,7 +125,7 @@ export default function BooksPage() {
   }
 
   return (
-    <PageShell title="Books" subtitle={`${tab === 'public' ? 'Free public reads' : 'Books available for purchase'}`}>
+    <PageShell title="Books" subtitle={tab === 'public' ? 'Free public reads' : tab === 'sell' ? 'Books available for purchase' : 'Browse all books'}>
       {error && (
         <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
           {error}
@@ -130,6 +133,7 @@ export default function BooksPage() {
       )}
       <div className="flex flex-wrap items-center gap-4 mb-6">
         <div className="flex rounded-lg border border-border overflow-hidden">
+          <TabButton active={tab === 'all'} onClick={() => setTab('all')}>All</TabButton>
           <TabButton active={tab === 'public'} onClick={() => setTab('public')}>Public</TabButton>
           <TabButton active={tab === 'sell'} onClick={() => setTab('sell')}>For Sale</TabButton>
         </div>
@@ -205,7 +209,7 @@ export default function BooksPage() {
       {loading ? (
         <BookGridSkeleton />
       ) : books.length === 0 ? (
-        <EmptyState message={`No ${tab} books found.`} />
+        <EmptyState message={tab === 'all' ? 'No books found.' : `No ${tab} books found.`} />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {books.map((book) => (
@@ -213,11 +217,16 @@ export default function BooksPage() {
               <div className="flex-1">
                 <h3 className="font-semibold text-lg leading-snug">{book.title}</h3>
                 <p className="text-sm text-foreground/70 mt-1">{book.author || 'Unknown author'}</p>
-                {book.category && (
-                  <span className="mt-2 inline-block text-xs px-2 py-1 rounded bg-secondary/20 text-primary">
-                    {book.category.name}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {book.category && (
+                    <span className="inline-block text-xs px-2 py-1 rounded bg-secondary/20 text-primary">
+                      {book.category.name}
+                    </span>
+                  )}
+                  <span className={`inline-block text-xs px-2 py-1 rounded capitalize ${book.visibility === 'sell' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                    {book.visibility === 'sell' ? 'For Sale' : 'Public'}
                   </span>
-                )}
+                </div>
                 <p className="mt-3 text-sm text-foreground/80 line-clamp-3">{book.description}</p>
               </div>
               <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
