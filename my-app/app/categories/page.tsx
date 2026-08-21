@@ -19,6 +19,7 @@ export default function CategoriesPage() {
   const [editDescription, setEditDescription] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const isAdmin = user?.role === 'admin';
 
@@ -40,29 +41,31 @@ export default function CategoriesPage() {
 
   async function create(e: React.FormEvent) {
     e.preventDefault();
+    setError('');
     setSubmitting(true);
     try {
       await api.categories.create({ name, description });
       setName('');
       setDescription('');
       await load();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to create category');
+      setError(err.message || 'Failed to create category');
     } finally {
       setSubmitting(false);
     }
   }
 
   async function update(id: string) {
+    setError('');
     setSubmitting(true);
     try {
       await api.categories.update(id, { name: editName, description: editDescription });
       setEditingId(null);
       await load();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to update category');
+      setError(err.message || 'Failed to update category');
     } finally {
       setSubmitting(false);
     }
@@ -70,17 +73,23 @@ export default function CategoriesPage() {
 
   async function remove(id: string) {
     if (!confirm('Delete this category? This may affect books in this category.')) return;
+    setError('');
     try {
       await api.categories.remove(id);
       await load();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to delete category');
+      setError(err.message || 'Failed to delete category');
     }
   }
 
   return (
     <PageShell title="Book Categories" subtitle="Browse and manage book categories">
+      {error && (
+        <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+          {error}
+        </div>
+      )}
       {isAdmin && (
         <form onSubmit={create} className="card p-6 mb-8 grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3 items-end">
           <div>
@@ -138,7 +147,7 @@ export default function CategoriesPage() {
                   {isAdmin && (
                     <div className="flex gap-2 mt-4">
                       <button
-                        onClick={() => { setEditingId(c.id); setEditName(c.name); setEditDescription(c.description || ''); }}
+                        onClick={() => { setEditingId(c.id); setEditName(c.name); setEditDescription(c.description || ''); setError(''); }}
                         className="text-sm px-3 py-1.5 rounded border border-border hover:bg-background transition-colors"
                       >
                         Edit

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 export function useAuth() {
   const [user, setUser] = useState<any>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -12,6 +13,7 @@ export function useAuth() {
     const u = localStorage.getItem('user');
     setToken(t);
     setUser(u ? JSON.parse(u) : null);
+    setIsReady(true);
   }, []);
 
   function login(data: { access_token: string; user: any }) {
@@ -21,6 +23,7 @@ export function useAuth() {
     }
     setToken(data.access_token);
     setUser(data.user);
+    setIsReady(true);
   }
 
   function logout() {
@@ -30,7 +33,8 @@ export function useAuth() {
     }
     setToken(null);
     setUser(null);
+    setIsReady(true);
   }
 
-  return { user, token, login, logout, isAuthenticated: !!token };
+  return { user, token, isReady, login, logout, isAuthenticated: !!token };
 }

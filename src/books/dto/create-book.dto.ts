@@ -33,38 +33,3 @@ export class CreateBookDto {
   @IsString()
   categoryId: string;
 }
-
-export class UpdateBookDto {
-  @IsString()
-  @IsOptional()
-  title?: string;
-
-  @IsString()
-  @IsOptional()
-  author?: string;
-
-  @IsString()
-  @IsOptional()
-  @MaxLength(2000)
-  description?: string;
-
-  @IsEnum(BookVisibility)
-  @IsOptional()
-  visibility?: BookVisibility;
-
-  @IsNumber()
-  @IsOptional()
-  price?: number;
-
-  @IsString()
-  @IsOptional()
-  coverImage?: string;
-
-  @IsString()
-  @IsOptional()
-  content?: string;
-
-  @IsString()
-  @IsOptional()
-  categoryId?: string;
-}

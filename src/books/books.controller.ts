@@ -16,7 +16,7 @@ export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Create a new book (Admin only)' })
   create(@Body() createBookDto: CreateBookDto, @Request() req: any) {
@@ -48,7 +48,7 @@ export class BooksController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Update a book (Admin only)' })
   update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto, @Request() req: any) {
@@ -56,7 +56,7 @@ export class BooksController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Delete a book (Admin only)' })
   remove(@Param('id') id: string) {

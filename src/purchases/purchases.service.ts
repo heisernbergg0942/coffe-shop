@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Purchase, PaymentMethod, PurchaseStatus } from './entities/purchase.entity';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
-import { UpdatePurchaseStatusDto } from './dto/create-purchase.dto';
+import { UpdatePurchaseStatusDto } from './dto/update-purchase.dto';
 import { BooksService } from '../books/books.service';
 
 @Injectable()

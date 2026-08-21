@@ -17,17 +17,18 @@ type Purchase = {
 
 export default function PurchasesPage() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isReady } = useAuth();
   const [items, setItems] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isReady) return;
     if (!isAuthenticated) {
       router.push('/login');
       return;
     }
     load();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isReady]);
 
   async function load() {
     setLoading(true);
@@ -41,7 +42,7 @@ export default function PurchasesPage() {
     }
   }
 
-  if (!isAuthenticated) return null;
+  if (!isReady || !isAuthenticated) return null;
 
   return (
     <PageShell title="My Purchases" subtitle={`${items.length} total purchase${items.length !== 1 ? 's' : ''}`}>

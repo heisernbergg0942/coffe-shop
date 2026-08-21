@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEnum, IsDecimal, MaxLength } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsNumber, MaxLength } from 'class-validator';
 import { BookVisibility } from '../entities/book.entity';
 
 export class UpdateBookDto {
@@ -19,9 +19,9 @@ export class UpdateBookDto {
   @IsOptional()
   visibility?: BookVisibility;
 
-  @IsDecimal()
+  @IsNumber()
   @IsOptional()
-  price?: string;
+  price?: number;
 
   @IsString()
   @IsOptional()

@@ -28,6 +28,7 @@ export class PurchasesController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Get all purchases (Admin only)' })
   findAll() {
@@ -41,6 +42,7 @@ export class PurchasesController {
   }
 
   @Put(':id/status')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Update purchase status (Admin only)' })
   updateStatus(@Param('id') id: string, @Body() updateDto: UpdatePurchaseStatusDto) {

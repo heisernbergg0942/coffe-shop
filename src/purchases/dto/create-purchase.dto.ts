@@ -13,8 +13,3 @@ export class CreatePurchaseDto {
   @IsOptional()
   notes?: string;
 }
-
-export class UpdatePurchaseStatusDto {
-  @IsString()
-  status: 'pending' | 'completed' | 'cancelled';
-}

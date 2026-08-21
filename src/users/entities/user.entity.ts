@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   OneToMany,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { BookCategory } from '../../book-categories/entities/book-category.entity';
 import { Book } from '../../books/entities/book.entity';
 import { Purchase } from '../../purchases/entities/purchase.entity';
@@ -28,6 +29,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Exclude()
   @Column({ nullable: true })
   password: string;
 

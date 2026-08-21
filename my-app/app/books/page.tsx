@@ -20,6 +20,7 @@ export default function BooksPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const [form, setForm] = useState({ title: '', author: '', description: '', visibility: 'public' as 'public' | 'sell', price: '', categoryId: '' });
 
   const isAdmin = user?.role === 'admin';
@@ -46,12 +47,14 @@ export default function BooksPage() {
 
   function openCreate() {
     setEditingBook(null);
+    setError('');
     setForm({ title: '', author: '', description: '', visibility: tab, price: '', categoryId: categories[0]?.id || '' });
     setShowForm(true);
   }
 
   function openEdit(book: Book) {
     setEditingBook(book);
+    setError('');
     setForm({
       title: book.title,
       author: book.author || '',
@@ -65,6 +68,11 @@ export default function BooksPage() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    setError('');
+    if (!form.categoryId) {
+      setError('Please select a category.');
+      return;
+    }
     setSubmitting(true);
     try {
       const payload: any = {
@@ -84,9 +92,9 @@ export default function BooksPage() {
       }
       setShowForm(false);
       await load();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to save book');
+      setError(err.message || 'Failed to save book');
     } finally {
       setSubmitting(false);
     }
@@ -94,12 +102,13 @@ export default function BooksPage() {
 
   async function remove(bookId: string) {
     if (!confirm('Delete this book?')) return;
+    setError('');
     try {
       await api.books.remove(bookId);
       await load();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to delete book');
+      setError(err.message || 'Failed to delete book');
     }
   }
 
@@ -114,6 +123,11 @@ export default function BooksPage() {
 
   return (
     <PageShell title="Books" subtitle={`${tab === 'public' ? 'Free public reads' : 'Books available for purchase'}`}>
+      {error && (
+        <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+          {error}
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-4 mb-6">
         <div className="flex rounded-lg border border-border overflow-hidden">
           <TabButton active={tab === 'public'} onClick={() => setTab('public')}>Public</TabButton>
@@ -138,6 +152,11 @@ export default function BooksPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="bg-white rounded-xl shadow-xl border border-border w-full max-w-lg p-6">
             <h3 className="text-lg font-semibold mb-4">{editingBook ? 'Edit Book' : 'Add Book'}</h3>
+            {error && (
+              <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                {error}
+              </div>
+            )}
             <form onSubmit={submit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Title</label>
