@@ -83,33 +83,17 @@ export default function RegisterPage() {
               <form onSubmit={onSubmit} className="space-y-5">
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-1.5">Name</label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-foreground/40">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                    </span>
-                    <input className="input-field pl-10" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
-                  </div>
+                  <input className="input-field" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-foreground/40">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 00-9-9m0 0A9 9 0 019 12" /></svg>
-                    </span>
-                    <input className="input-field pl-10" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" />
-                  </div>
+                  <input className="input-field" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-1.5">Password</label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-foreground/40">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                    </span>
-                    <input className="input-field pl-10" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} placeholder="At least 6 characters" />
-                  </div>
+                  <input className="input-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} placeholder="At least 6 characters" />
                 </div>
                 <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2">
-                  {loading && <span className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
                   {loading ? 'Creating account...' : 'Register'}
                 </button>
               </form>
