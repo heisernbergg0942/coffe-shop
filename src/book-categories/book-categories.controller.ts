@@ -3,9 +3,6 @@ import { BookCategoriesService } from './book-categories.service';
 import { CreateBookCategoryDto } from './dto/create-book-category.dto';
 import { UpdateBookCategoryDto } from './dto/update-book-category.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { UserRole } from '../users/entities/user.entity';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('book-categories')
@@ -15,9 +12,8 @@ export class BookCategoriesController {
   constructor(private readonly bookCategoriesService: BookCategoriesService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Create a new book category (Admin only)' })
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Create a new book category' })
   create(@Body() createBookCategoryDto: CreateBookCategoryDto, @Request() req: any) {
     return this.bookCategoriesService.create(createBookCategoryDto, req.user.id);
   }
@@ -35,17 +31,15 @@ export class BookCategoriesController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Update a book category (Admin only)' })
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Update a book category' })
   update(@Param('id') id: string, @Body() updateBookCategoryDto: UpdateBookCategoryDto, @Request() req: any) {
     return this.bookCategoriesService.update(id, updateBookCategoryDto, req.user.id);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Delete a book category (Admin only)' })
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Delete a book category' })
   remove(@Param('id') id: string) {
     return this.bookCategoriesService.remove(id);
   }

@@ -147,7 +147,7 @@ export default function BooksPage() {
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
         </select>
-        {isAdmin && (
+        {user && (
           <button onClick={openCreate} className="btn-primary ml-auto">Add Book</button>
         )}
       </div>
@@ -237,7 +237,7 @@ export default function BooksPage() {
                   {book.visibility === 'sell' && (
                     <button onClick={() => handleBuy(book.id)} className="btn-primary text-sm">Buy Now</button>
                   )}
-                  {isAdmin && (
+                  {user && (
                     <>
                       <button onClick={() => openEdit(book)} className="text-sm px-3 py-1.5 rounded border border-border hover:bg-background transition-colors">Edit</button>
                       <button onClick={() => remove(book.id)} className="text-sm px-3 py-1.5 rounded border border-red-200 text-red-700 hover:bg-red-50 transition-colors">Delete</button>
