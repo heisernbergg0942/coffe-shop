@@ -10,12 +10,12 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('book-categories')
 @Controller('book-categories')
-@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class BookCategoriesController {
   constructor(private readonly bookCategoriesService: BookCategoriesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Create a new book category (Admin only)' })
   create(@Body() createBookCategoryDto: CreateBookCategoryDto, @Request() req: any) {
@@ -35,6 +35,7 @@ export class BookCategoriesController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Update a book category (Admin only)' })
   update(@Param('id') id: string, @Body() updateBookCategoryDto: UpdateBookCategoryDto, @Request() req: any) {
@@ -42,6 +43,7 @@ export class BookCategoriesController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Delete a book category (Admin only)' })
   remove(@Param('id') id: string) {
