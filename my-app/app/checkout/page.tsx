@@ -3,7 +3,6 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { useAuth } from '@/hooks/use-auth';
 import { PageShell } from '@/components/page-shell';
 
 type Book = { id: string; title: string; price?: number };
@@ -12,7 +11,6 @@ function CheckoutForm() {
   const router = useRouter();
   const search = useSearchParams();
   const bookId = search.get('bookId');
-  const { isAuthenticated } = useAuth();
   const [book, setBook] = useState<Book | null>(null);
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [notes, setNotes] = useState('');
@@ -35,7 +33,8 @@ function CheckoutForm() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isAuthenticated) {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
       router.push('/login');
       return;
     }
@@ -49,17 +48,6 @@ function CheckoutForm() {
     } finally {
       setSubmitting(false);
     }
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <PageShell title="Checkout" subtitle="Please login to complete your purchase">
-        <div className="card p-8 text-center">
-          <p className="text-foreground/70 mb-4">You need to login before purchasing.</p>
-          <button onClick={() => router.push('/login')} className="btn-primary">Go to Login</button>
-        </div>
-      </PageShell>
-    );
   }
 
   return (
