@@ -47,20 +47,20 @@
 
 ---
 
-## Scene 4: Book Category CRUD — Admin (3 min)
+## Scene 4: Book Category CRUD — Regular User (3 min)
 
-1. Stay logged in as **admin**
+1. Click **Logout** if logged in, and login as a **regular user** (`user@coffee.shop` / `user123`)
 2. Navigate to **Categories**
 3. **Create**: Fill name + description, click **Add Category**
 4. **Edit**: Click **Edit** on a category card, change name, click **Save**
 5. **Delete**: Click **Delete**, confirm → card removed
-6. Note: "Only admin sees these buttons. Regular users see categories read-only."
+6. Note: "Any authenticated user can manage book categories, just as requested in the scope."
 
 ---
 
-## Scene 5: Book CRUD — Admin (3 min)
+## Scene 5: Book CRUD — Regular User (3 min)
 
-1. Stay on **Books** page as admin
+1. Navigate to the **Books** page
 2. Click **Add Book** (top right)
 3. Fill form:
    - Title, Author, Description
@@ -75,10 +75,9 @@
 
 ## Scene 6: Purchase Flow — Regular User (3 min)
 
-1. Click **Logout**
-2. Login as: `user@coffee.shop` / `user123`
-3. Go to **Books** → **For Sale** tab
-4. Click **Buy Now** on any sell book (e.g., *Latte Art Basics*)
+1. Stay on the **Books** page
+2. Go to the **For Sale** tab
+3. Click **Buy Now** on any sell book (e.g., *Latte Art Basics*)
 5. On checkout:
    - Book details shown
    - Payment Method: **Cash** (default)
