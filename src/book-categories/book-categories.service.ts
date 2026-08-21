@@ -38,7 +38,7 @@ export class BookCategoriesService {
 
   async update(id: string, updateBookCategoryDto: any, userId: string) {
     const category = await this.findOne(id);
-    Object.assign(category, updateBookCategoryDto, { createdById: userId });
+    Object.assign(category, updateBookCategoryDto);
     return this.bookCategoriesRepository.save(category);
   }
 
