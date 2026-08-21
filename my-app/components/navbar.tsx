@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { CoffeeCupIcon } from '@/components/icons';
 
-const links = [
+const baseLinks = [
   { href: '/categories', label: 'Categories' },
   { href: '/books', label: 'Books' },
   { href: '/purchases', label: 'My Purchases' },
@@ -16,6 +16,10 @@ export function Navbar() {
   const pathname = usePathname();
   const { user, logout, isAuthenticated } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isAdmin = user?.role === 'admin';
+  const links = isAdmin
+    ? [...baseLinks, { href: '/admin/purchases', label: 'All Purchases' }]
+    : baseLinks;
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-border">

@@ -42,6 +42,8 @@
    - *Latte Art Basics* ($9.99)
    - *History of Coffee* (free)
    - *Quantum Brewing* ($14.50)
+   - *Poems for Mornings* (free)
+   - *Modern Web Dev* ($19.99)
 
 ---
 
@@ -92,10 +94,9 @@
 ## Scene 7: Admin — Manage Purchases (2 min)
 
 1. Logout, login as **admin** (`admin@coffee.shop` / `admin123`)
-2. Go to **My Purchases** (or via Swagger: `GET /purchases`)
+2. Click **All Purchases** in the navbar
 3. Show all orders from all users (admin sees everything)
-4. Can update order status via Swagger:
-   - `PUT /purchases/{id}/status` with body `{ "status": "completed" }`
+4. Click **Complete** or **Cancel** to update an order status
 
 ---
 
@@ -107,4 +108,5 @@
 ## Quick Troubleshooting
 - If books/categories don't load: check Render logs — seed runs on startup
 - If login fails: verify credentials `admin@coffee.shop` / `admin123`
+- If you see "User not found" after a deployment: logout and login again — the database was re-seeded, so old JWT tokens point to missing users
 - If 404 on frontend: Vercel may still be deploying, wait 1-2 min
