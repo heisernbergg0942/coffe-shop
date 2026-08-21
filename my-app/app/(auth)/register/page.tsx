@@ -56,7 +56,7 @@ export default function RegisterPage() {
         </Link>
       </div>
       <div className="flex-1 flex items-center justify-center px-4 py-10">
-        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl border border-border overflow-hidden">
+        <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl border border-border overflow-hidden">
           <div className="grid md:grid-cols-2">
             <div className="bg-primary p-8 text-white flex flex-col justify-between hidden md:flex">
               <div>
@@ -64,25 +64,25 @@ export default function RegisterPage() {
                 <h2 className="text-3xl font-bold mb-4">Create account</h2>
                 <p className="text-white/80 leading-relaxed">Join Coffee Shop to browse books, purchase reads, and manage orders.</p>
               </div>
-              <div className="mt-8">
+              <div className="mt-auto pt-8">
                 <p className="text-sm text-white/70 mb-1">Need an account?</p>
-                <p className="text-sm">Signing up takes less than a minute.</p>
+                <p className="text-sm text-white/90">Signing up takes less than a minute.</p>
               </div>
             </div>
-            <div className="p-8">
+            <div className="p-8 md:p-10">
               <div className="md:hidden mb-6 text-center">
                 <CoffeeCupIcon className="w-8 h-8 text-primary mx-auto mb-3" />
                 <h1 className="text-2xl font-bold text-primary">Create account</h1>
                 <p className="text-sm text-foreground/70 mt-1">Join Coffee Shop today</p>
               </div>
               {error && (
-                <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                <div className="mb-5 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
                   {error}
                 </div>
               )}
               <form onSubmit={onSubmit} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Name</label>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Name</label>
                   <div className="relative">
                     <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-foreground/40">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
@@ -91,7 +91,7 @@ export default function RegisterPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Email</label>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
                   <div className="relative">
                     <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-foreground/40">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 00-9-9m0 0A9 9 0 019 12" /></svg>
@@ -100,7 +100,7 @@ export default function RegisterPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Password</label>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Password</label>
                   <div className="relative">
                     <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-foreground/40">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
@@ -128,7 +128,7 @@ export default function RegisterPage() {
                 </button>
               </div>
               <p className="mt-6 text-center text-sm text-foreground/70">
-                Already have an account? <Link href="/login" className="text-primary font-semibold">Login</Link>
+                Already have an account? <Link href="/login" className="text-primary font-semibold hover:underline">Login</Link>
               </p>
             </div>
           </div>
