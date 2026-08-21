@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
+import { api } from '@/lib/api';
 import { CoffeeCupIcon } from '@/components/icons';
 
 const baseLinks = [
@@ -20,6 +21,14 @@ export function Navbar() {
   const links = isAdmin
     ? [...baseLinks, { href: '/admin/purchases', label: 'All Purchases' }]
     : baseLinks;
+
+  // Keep-alive ping to prevent Render backend from sleeping and wiping the SQLite database
+  useEffect(() => {
+    const interval = setInterval(() => {
+      api.books.findAll().catch(() => {});
+    }, 5 * 60 * 1000); // 5 minutes
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-border">
